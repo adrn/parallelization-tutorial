@@ -66,7 +66,8 @@ def main(pool):
                     results_file=results_file)
     tasks = [(i,obj) for i,obj in enumerate(data)]
 
-    pool.map(worker, tasks, callback=worker.callback)
+    for r in pool.map(worker, tasks, callback=worker.callback):
+        pass
 
     with h5py.File(results_file, 'r') as f:
         print(f['data'][:])
@@ -88,5 +89,8 @@ if __name__ == "__main__":
 
     pool = schwimmbad.choose_pool(mpi=args.mpi,
                                   processes=args.n_cores)
+
+    print("Using pool: {0}".format(pool.__class__.__name__))
+
     main(pool)
     sys.exit(0)
